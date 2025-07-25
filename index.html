@@ -1,1054 +1,135 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idiom Master 300 - 英語熟語学習アプリ</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .tabs {
-            display: flex;
-            background: white;
-            border-radius: 10px 10px 0 0;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            background: #f8f9fa;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border-right: 1px solid #dee2e6;
-        }
-
-        .tab:last-child {
-            border-right: none;
-        }
-
-        .tab.active {
-            background: white;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .tab:hover:not(.active) {
-            background: #e9ecef;
-        }
-
-        .content {
-            background: white;
-            border-radius: 0 0 10px 10px;
-            padding: 30px;
-            min-height: 500px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .mode-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .mode-btn {
-            padding: 12px 24px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .mode-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .study-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 30px;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .study-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        .study-card.clickable {
-            cursor: pointer;
-        }
-
-        .study-card.not-clickable {
-            cursor: default;
-        }
-
-        .phrase {
-            font-size: 2rem;
-            color: #667eea;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .meaning {
-            font-size: 1.3rem;
-            color: #495057;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .quiz-option {
-            padding: 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .quiz-option:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-
-        .quiz-option.correct {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-
-        .quiz-option.incorrect {
-            background: #f8d7da;
-            border-color: #dc3545;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-warning {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .range-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .range-input {
-            padding: 8px 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 5px;
-            width: 80px;
-            text-align: center;
-        }
-
-        .word-list {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-        }
-
-        .word-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-            transition: background 0.3s ease;
-        }
-
-        .word-item:hover {
-            background: #f8f9fa;
-        }
-
-        .word-item:last-child {
-            border-bottom: none;
-        }
-
-        .word-phrase {
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .word-meaning {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-label {
-            color: #6c757d;
-            margin-top: 5px;
-        }
-
-        .progress-info {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-
-        .progress-counter {
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .phrase {
-                font-size: 1.5rem;
-            }
-
-            .meaning {
-                font-size: 1.1rem;
-            }
-
-            .quiz-options {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .tab {
-                border-right: none;
-                border-bottom: 1px solid #dee2e6;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Idiom Master 300</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f0f8ff; }
+    h1 { font-size: 1.8em; color: #2b4a9b; }
+    button { margin: 1em 0.5em; padding: 0.5em 1em; font-size: 1em; }
+    .idiom { margin-bottom: 1.5em; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 Idiom Master 300</h1>
-            <p>英語の重要熟語300個を効率的に学習</p>
-        </div>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="study">学習</button>
-            <button class="tab" data-tab="wordlist">単語リスト</button>
-            <button class="tab" data-tab="statistics">統計</button>
-        </div>
-
-        <div class="content">
-            <!-- 学習タブ -->
-            <div id="study-tab" class="tab-content">
-                <div class="mode-selector">
-                    <button class="mode-btn active" data-mode="memorize">暗記モード</button>
-                    <button class="mode-btn" data-mode="quiz">テストモード</button>
-                </div>
-
-                <!-- 暗記モード -->
-                <div id="memorize-mode" class="mode-content">
-                    <div class="progress-info">
-                        <span class="progress-counter">1 / 300</span>
-                    </div>
-                    <div class="study-card clickable">
-                        <div class="phrase">熟語を読み込み中...</div>
-                        <div class="meaning hidden">意味がここに表示されます</div>
-                        <div style="margin-top: 20px; color: #6c757d; font-size: 0.9rem;">
-                            💡 カードをクリックまたは「意味を表示」ボタンで意味を確認
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="show-meaning">意味を表示</button>
-                        <button class="btn btn-success hidden" id="remember-btn">覚えた！</button>
-                        <button class="btn btn-warning hidden" id="not-remember-btn">覚えてない</button>
-                    </div>
-                </div>
-
-                <!-- テストモード -->
-                <div id="quiz-mode" class="mode-content hidden">
-                    <div class="range-selector">
-                        <span>範囲設定：No.</span>
-                        <input type="number" class="range-input" id="range-start" min="1" max="300" value="1">
-                        <span>～</span>
-                        <input type="number" class="range-input" id="range-end" min="1" max="300" value="50">
-                        <button class="btn btn-primary" id="set-range">範囲設定</button>
-                    </div>
-                    <div class="progress-info">
-                        <span class="progress-counter">問題を設定してください</span>
-                    </div>
-                    <div class="study-card">
-                        <div class="phrase">テスト範囲を設定してください</div>
-                        <div class="quiz-options hidden">
-                            <div class="quiz-option" data-option="0">選択肢1</div>
-                            <div class="quiz-option" data-option="1">選択肢2</div>
-                            <div class="quiz-option" data-option="2">選択肢3</div>
-                            <div class="quiz-option" data-option="3">選択肢4</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary hidden" id="next-quiz">次の問題</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 単語リストタブ -->
-            <div id="wordlist-tab" class="tab-content hidden">
-                <div class="mode-selector">
-                    <button class="mode-btn active" data-list="remembered">覚えた単語</button>
-                    <button class="mode-btn" data-list="not-remembered">覚えてない単語</button>
-                </div>
-
-                <div id="remembered-list" class="word-list">
-                    <div class="word-item">
-                        <div>
-                            <div class="word-phrase">まだ覚えた単語がありません</div>
-                            <div class="word-meaning">暗記モードで学習を開始してください</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="not-remembered-list" class="word-list hidden">
-                    <div class="word-item">
-                        <div>
-                            <div class="word-phrase">まだ覚えていない単語がありません</div>
-                            <div class="word-meaning">暗記モードで学習を開始してください</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 統計タブ -->
-            <div id="statistics-tab" class="tab-content hidden">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-remembered">0</div>
-                        <div class="stat-label">覚えた単語数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-not-remembered">0</div>
-                        <div class="stat-label">覚えてない単語数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="quiz-correct">0</div>
-                        <div class="stat-label">テスト正解数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="quiz-accuracy">0%</div>
-                        <div class="stat-label">テスト正解率</div>
-                    </div>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="export-stats">統計をエクスポート</button>
-                    <button class="btn btn-danger" id="reset-stats">データをリセット</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 熟語データ（300語のサンプル）
-        const idiomsData = [
-            { phrase: "lead to ～", meaning: "～（という結果）を引き起こす、～へと通じる" },
-            { phrase: "look forward to ～", meaning: "～を楽しみにしている" },
-            { phrase: "take care of ～", meaning: "～の世話をする、～を処理する" },
-            { phrase: "come up with ～", meaning: "～を思いつく、～を考え出す" },
-            { phrase: "get rid of ～", meaning: "～を取り除く、～を処分する" },
-            { phrase: "put off ～", meaning: "～を延期する" },
-            { phrase: "turn out", meaning: "結果として～になる" },
-            { phrase: "break down", meaning: "故障する、分解する" },
-            { phrase: "bring up ～", meaning: "～を育てる、～を話題にする" },
-            { phrase: "carry out ～", meaning: "～を実行する、～を遂行する" },
-            { phrase: "check out ～", meaning: "～を調べる、～をチェックアウトする" },
-            { phrase: "deal with ～", meaning: "～に対処する、～を扱う" },
-            { phrase: "end up ～", meaning: "結局～になる" },
-            { phrase: "figure out ～", meaning: "～を理解する、～を解決する" },
-            { phrase: "give up ～", meaning: "～をあきらめる" },
-            { phrase: "hang out", meaning: "ぶらぶらする、たむろする" },
-            { phrase: "keep on ～", meaning: "～を続ける" },
-            { phrase: "make up ～", meaning: "～を作り上げる、～を構成する" },
-            { phrase: "pick up ～", meaning: "～を拾う、～を迎えに行く" },
-            { phrase: "point out ～", meaning: "～を指摘する" },
-            { phrase: "run into ～", meaning: "～に偶然出会う" },
-            { phrase: "set up ～", meaning: "～を設立する、～を設置する" },
-            { phrase: "show up", meaning: "現れる、姿を見せる" },
-            { phrase: "take off", meaning: "離陸する、脱ぐ" },
-            { phrase: "work out", meaning: "うまくいく、運動する" },
-            { phrase: "account for ～", meaning: "～を説明する、～の原因となる" },
-            { phrase: "back up ～", meaning: "～を支援する、～をバックアップする" },
-            { phrase: "call off ～", meaning: "～を中止する" },
-            { phrase: "drop by", meaning: "立ち寄る" },
-            { phrase: "fill in ～", meaning: "～に記入する、～の代役をする" },
-            { phrase: "go over ～", meaning: "～を調べる、～を復習する" },
-            { phrase: "hold on", meaning: "待つ、しっかりつかまる" },
-            { phrase: "look after ～", meaning: "～の世話をする" },
-            { phrase: "make out ～", meaning: "～を理解する、～を見分ける" },
-            { phrase: "pass away", meaning: "亡くなる" },
-            { phrase: "put up with ～", meaning: "～を我慢する" },
-            { phrase: "run out of ～", meaning: "～を切らす" },
-            { phrase: "stand for ～", meaning: "～を表す、～を支持する" },
-            { phrase: "take after ～", meaning: "～に似ている" },
-            { phrase: "wear out", meaning: "すり切れる、疲れ果てる" },
-            { phrase: "be supposed to ～", meaning: "～することになっている" },
-            { phrase: "be used to ～", meaning: "～に慣れている" },
-            { phrase: "get used to ～", meaning: "～に慣れる" },
-            { phrase: "have to ～", meaning: "～しなければならない" },
-            { phrase: "ought to ～", meaning: "～すべきである" },
-            { phrase: "would rather ～", meaning: "むしろ～したい" },
-            { phrase: "as long as ～", meaning: "～する限り、～である限り" },
-            { phrase: "as soon as ～", meaning: "～するとすぐに" },
-            { phrase: "even though ～", meaning: "～にもかかわらず" },
-            { phrase: "in case ～", meaning: "～の場合に備えて" },
-            // ここに残り250語を追加（実際のアプリでは全300語を含める）
-        ];
-
-        // 残りの250語を生成（デモ用）
-        for (let i = 51; i <= 300; i++) {
-            idiomsData.push({
-                phrase: `idiom phrase ${i}`,
-                meaning: `熟語${i}の意味説明`
-            });
-        }
-
-        // アプリケーション状態
-        let currentMode = 'memorize';
-        let currentTab = 'study';
-        let currentIndex = 0;
-        let quizRange = { start: 1, end: 50 };
-        let quizQuestions = [];
-        let currentQuizIndex = 0;
-        let currentQuizAnswer = -1;
-
-        // ローカルストレージキー
-        const STORAGE_KEYS = {
-            REMEMBERED: 'idiom_remembered',
-            NOT_REMEMBERED: 'idiom_not_remembered',
-            QUIZ_STATS: 'idiom_quiz_stats'
-        };
-
-        // データ管理
-        function getStorageData(key) {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : {};
-        }
-
-        function setStorageData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
-
-        function updateWordStatus(index, status) {
-            const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
-            const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
-
-            if (status === 'remembered') {
-                remembered[index] = (remembered[index] || 0) + 1;
-                delete notRemembered[index];
-            } else {
-                notRemembered[index] = (notRemembered[index] || 0) + 1;
-                delete remembered[index];
-            }
-
-            setStorageData(STORAGE_KEYS.REMEMBERED, remembered);
-            setStorageData(STORAGE_KEYS.NOT_REMEMBERED, notRemembered);
-        }
-
-        function updateQuizStats(index, correct) {
-            const stats = getStorageData(STORAGE_KEYS.QUIZ_STATS);
-            if (!stats[index]) {
-                stats[index] = { correct: 0, incorrect: 0 };
-            }
-
-            if (correct) {
-                stats[index].correct++;
-            } else {
-                stats[index].incorrect++;
-            }
-
-            setStorageData(STORAGE_KEYS.QUIZ_STATS, stats);
-        }
-
-        // タブ切り替え
-        function switchTab(tabName) {
-            // タブボタンの状態更新
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-            // コンテンツの表示切り替え
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-
-            currentTab = tabName;
-
-            if (tabName === 'wordlist') {
-                updateWordLists();
-            } else if (tabName === 'statistics') {
-                updateStatistics();
-            }
-        }
-
-        // モード切り替え
-        function switchMode(mode) {
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
-
-            document.querySelectorAll('.mode-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            document.getElementById(`${mode}-mode`).classList.remove('hidden');
-
-            currentMode = mode;
-
-            if (mode === 'memorize') {
-                initMemorizeMode();
-            }
-        }
-
-        // 暗記モード初期化
-        function initMemorizeMode() {
-            currentIndex = 0;
-            displayCurrentPhrase();
-        }
-
-        // 現在の熟語を表示
-        function displayCurrentPhrase() {
-            const phrase = document.querySelector('#memorize-mode .phrase');
-            const meaning = document.querySelector('#memorize-mode .meaning');
-            const progress = document.querySelector('#memorize-mode .progress-counter');
-            const studyCard = document.querySelector('#memorize-mode .study-card');
-
-            phrase.textContent = idiomsData[currentIndex].phrase;
-            meaning.textContent = idiomsData[currentIndex].meaning;
-            meaning.classList.add('hidden');
-
-            progress.textContent = `${currentIndex + 1} / ${idiomsData.length}`;
-
-            // カードにクリックイベント追加
-            studyCard.classList.add('clickable');
-            studyCard.classList.remove('not-clickable');
-            studyCard.onclick = showMeaning;
-
-            // ボタンの状態リセット
-            document.getElementById('show-meaning').classList.remove('hidden');
-            document.getElementById('remember-btn').classList.add('hidden');
-            document.getElementById('not-remember-btn').classList.add('hidden');
-        }
-
-        // 意味を表示
-        function showMeaning() {
-            const meaning = document.querySelector('#memorize-mode .meaning');
-            const studyCard = document.querySelector('#memorize-mode .study-card');
-            
-            // 既に意味が表示されている場合は何もしない
-            if (!meaning.classList.contains('hidden')) {
-                return;
-            }
-
-            meaning.classList.remove('hidden');
-
-            // カードのクリックイベントを無効化
-            studyCard.classList.remove('clickable');
-            studyCard.classList.add('not-clickable');
-            studyCard.onclick = null;
-
-            document.getElementById('show-meaning').classList.add('hidden');
-            document.getElementById('remember-btn').classList.remove('hidden');
-            document.getElementById('not-remember-btn').classList.remove('hidden');
-        }
-
-        // 覚えた/覚えていないボタンの処理
-        function handleMemorizeResult(remembered) {
-            updateWordStatus(currentIndex, remembered ? 'remembered' : 'not-remembered');
-            
-            currentIndex++;
-            if (currentIndex >= idiomsData.length) {
-                currentIndex = 0;
-            }
-            
-            setTimeout(() => {
-                displayCurrentPhrase();
-            }, 500);
-        }
-
-        // テストモード範囲設定
-        function setQuizRange() {
-            const start = parseInt(document.getElementById('range-start').value);
-            const end = parseInt(document.getElementById('range-end').value);
-
-            if (start < 1 || end > idiomsData.length || start > end) {
-                alert('正しい範囲を入力してください（1-300）');
-                return;
-            }
-
-            quizRange = { start: start - 1, end: end - 1 };
-            generateQuizQuestions();
-            displayCurrentQuiz();
-        }
-
-        // テスト問題生成
-        function generateQuizQuestions() {
-            quizQuestions = [];
-            for (let i = quizRange.start; i <= quizRange.end; i++) {
-                quizQuestions.push(i);
-            }
-            
-            // シャッフル
-            for (let i = quizQuestions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [quizQuestions[i], quizQuestions[j]] = [quizQuestions[j], quizQuestions[i]];
-            }
-            
-            currentQuizIndex = 0;
-        }
-
-        // 現在のテスト問題表示
-        function displayCurrentQuiz() {
-            if (currentQuizIndex >= quizQuestions.length) {
-                alert('テスト完了！');
-                return;
-            }
-
-            const questionIndex = quizQuestions[currentQuizIndex];
-            const correctAnswer = idiomsData[questionIndex];
-            
-            // 選択肢生成
-            const options = [correctAnswer];
-            const usedIndices = new Set([questionIndex]);
-            
-            while (options.length < 4) {
-                const randomIndex = Math.floor(Math.random() * idiomsData.length);
-                if (!usedIndices.has(randomIndex)) {
-                    options.push(idiomsData[randomIndex]);
-                    usedIndices.add(randomIndex);
-                }
-            }
-            
-            // シャッフル
-            for (let i = options.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [options[i], options[j]] = [options[j], options[i]];
-            }
-            
-            currentQuizAnswer = options.indexOf(correctAnswer);
-
-            // UI更新
-            const phrase = document.querySelector('#quiz-mode .phrase');
-            const quizOptions = document.querySelector('.quiz-options');
-            const progress = document.querySelector('#quiz-mode .progress-counter');
-
-            phrase.textContent = correctAnswer.phrase;
-            progress.textContent = `${currentQuizIndex + 1} / ${quizQuestions.length}`;
-
-            quizOptions.classList.remove('hidden');
-            document.querySelectorAll('.quiz-option').forEach((option, index) => {
-                option.textContent = options[index].meaning;
-                option.className = 'quiz-option';
-                option.onclick = () => selectQuizOption(index);
-            });
-
-            document.getElementById('next-quiz').classList.add('hidden');
-        }
-
-        // テスト選択肢選択
-        function selectQuizOption(selectedIndex) {
-            const options = document.querySelectorAll('.quiz-option');
-            const correct = selectedIndex === currentQuizAnswer;
-            
-            options.forEach((option, index) => {
-                option.onclick = null;
-                if (index === currentQuizAnswer) {
-                    option.classList.add('correct');
-                } else if (index === selectedIndex) {
-                    option.classList.add('incorrect');
-                }
-            });
-
-            // 統計更新
-            const questionIndex = quizQuestions[currentQuizIndex];
-            updateQuizStats(questionIndex, correct);
-
-            document.getElementById('next-quiz').classList.remove('hidden');
-        }
-
-        // 次のテスト問題
-        function nextQuiz() {
-            currentQuizIndex++;
-            if (currentQuizIndex >= quizQuestions.length) {
-                alert('テスト完了！統計タブで結果を確認できます。');
-                switchTab('statistics');
-            } else {
-                displayCurrentQuiz();
-            }
-        }
-
-        // 単語リスト更新
-        function updateWordLists() {
-            const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
-            const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
-
-            updateWordList('remembered-list', remembered);
-            updateWordList('not-remembered-list', notRemembered);
-        }
-
-        function updateWordList(listId, data) {
-            const listElement = document.getElementById(listId);
-            listElement.innerHTML = '';
-
-            const indices = Object.keys(data).map(Number).sort((a, b) => a - b);
-            
-            if (indices.length === 0) {
-                const emptyItem = document.createElement('div');
-                emptyItem.className = 'word-item';
-                emptyItem.innerHTML = `
-                    <div>
-                        <div class="word-phrase">まだ単語がありません</div>
-                        <div class="word-meaning">暗記モードで学習を開始してください</div>
-                    </div>
-                `;
-                listElement.appendChild(emptyItem);
-                return;
-            }
-
-            indices.forEach(index => {
-                const item = document.createElement('div');
-                item.className = 'word-item';
-                
-                const idiom = idiomsData[index];
-                const count = data[index];
-                
-                item.innerHTML = `
-                    <div>
-                        <div class="word-phrase">${idiom.phrase}</div>
-                        <div class="word-meaning">${idiom.meaning}</div>
-                    </div>
-                    <div>
-                        <span style="color: #6c757d; font-size: 0.8rem;">回数: ${count}</span>
-                        ${listId === 'not-remembered-list' ? 
-                            `<button class="btn btn-success" style="margin-left: 10px; padding: 5px 10px; font-size: 0.8rem;" onclick="moveToRemembered(${index})">覚えた</button>` : 
-                            `<button class="btn btn-warning" style="margin-left: 10px; padding: 5px 10px; font-size: 0.8rem;" onclick="moveToNotRemembered(${index})">忘れた</button>`
-                        }
-                    </div>
-                `;
-                listElement.appendChild(item);
-            });
-        }
-
-        // 単語の状態変更
-        function moveToRemembered(index) {
-            updateWordStatus(index, 'remembered');
-            updateWordLists();
-        }
-
-        function moveToNotRemembered(index) {
-            updateWordStatus(index, 'not-remembered');
-            updateWordLists();
-        }
-
-        // 統計更新
-        function updateStatistics() {
-            const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
-            const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
-            const quizStats = getStorageData(STORAGE_KEYS.QUIZ_STATS);
-
-            // 基本統計
-            document.getElementById('total-remembered').textContent = Object.keys(remembered).length;
-            document.getElementById('total-not-remembered').textContent = Object.keys(notRemembered).length;
-
-            // テスト統計
-            let totalCorrect = 0;
-            let totalIncorrect = 0;
-            
-            Object.values(quizStats).forEach(stat => {
-                totalCorrect += stat.correct;
-                totalIncorrect += stat.incorrect;
-            });
-
-            document.getElementById('quiz-correct').textContent = totalCorrect;
-            
-            const accuracy = totalCorrect + totalIncorrect > 0 ? 
-                Math.round((totalCorrect / (totalCorrect + totalIncorrect)) * 100) : 0;
-            document.getElementById('quiz-accuracy').textContent = `${accuracy}%`;
-        }
-
-        // 統計エクスポート
-        function exportStatistics() {
-            const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
-            const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
-            const quizStats = getStorageData(STORAGE_KEYS.QUIZ_STATS);
-
-            let csvContent = "No.,熟語,意味,覚えた回数,テスト正解,テスト不正解,正解率,状態\n";
-
-            idiomsData.forEach((idiom, index) => {
-                const rememberedCount = remembered[index] || 0;
-                const notRememberedCount = notRemembered[index] || 0;
-                const quiz = quizStats[index] || { correct: 0, incorrect: 0 };
-                
-                const accuracy = quiz.correct + quiz.incorrect > 0 ? 
-                    Math.round((quiz.correct / (quiz.correct + quiz.incorrect)) * 100) : 0;
-                
-                let status = '未分類';
-                if (rememberedCount > 0) status = '覚えた';
-                else if (notRememberedCount > 0) status = '覚えてない';
-
-                csvContent += `${index + 1},"${idiom.phrase}","${idiom.meaning}",${rememberedCount},${quiz.correct},${quiz.incorrect},${accuracy}%,${status}\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'idiom_stats.csv';
-            link.click();
-        }
-
-        // データリセット
-        function resetStatistics() {
-            if (confirm('全ての学習データをリセットしますか？この操作は取り消せません。')) {
-                localStorage.removeItem(STORAGE_KEYS.REMEMBERED);
-                localStorage.removeItem(STORAGE_KEYS.NOT_REMEMBERED);
-                localStorage.removeItem(STORAGE_KEYS.QUIZ_STATS);
-                
-                updateStatistics();
-                updateWordLists();
-                alert('データをリセットしました。');
-            }
-        }
-
-        // 単語リストタブ切り替え
-        function switchWordList(listType) {
-            document.querySelectorAll('[data-list]').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-list="${listType}"]`).classList.add('active');
-
-            document.getElementById('remembered-list').classList.add('hidden');
-            document.getElementById('not-remembered-list').classList.add('hidden');
-            document.getElementById(`${listType}-list`).classList.remove('hidden');
-        }
-
-        // イベントリスナー設定
-        document.addEventListener('DOMContentLoaded', function() {
-            // タブ切り替え
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchTab(tab.dataset.tab);
-                });
-            });
-
-            // モード切り替え（学習タブ）
-            document.querySelectorAll('[data-mode]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    switchMode(btn.dataset.mode);
-                });
-            });
-
-            // 暗記モードボタン
-            document.getElementById('show-meaning').addEventListener('click', showMeaning);
-            document.getElementById('remember-btn').addEventListener('click', () => handleMemorizeResult(true));
-            document.getElementById('not-remember-btn').addEventListener('click', () => handleMemorizeResult(false));
-
-            // テストモードボタン
-            document.getElementById('set-range').addEventListener('click', setQuizRange);
-            document.getElementById('next-quiz').addEventListener('click', nextQuiz);
-
-            // 単語リスト切り替え
-            document.querySelectorAll('[data-list]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    switchWordList(btn.dataset.list);
-                });
-            });
-
-            // 統計ボタン
-            document.getElementById('export-stats').addEventListener('click', exportStatistics);
-            document.getElementById('reset-stats').addEventListener('click', resetStatistics);
-
-            // 初期化
-            initMemorizeMode();
-            updateStatistics();
+  <h1>Idiom Master 300</h1>
+
+  <div class="idiom">
+    <div id="phrase" style="font-size: 1.4em; font-weight: bold;"></div>
+    <div id="meaning" style="font-size: 1.2em; margin: 0.5em 0;"></div>
+  </div>
+
+  <button onclick="markRemembered()">覚えた</button>
+  <button onclick="markNotRemembered()">覚えてない</button>
+  <button onclick="resetProgress()">進捗リセット</button>
+  <button id="export-stats">統計をエクスポート</button>
+
+  <script>
+    const STORAGE_KEYS = {
+      REMEMBERED: 'idioms_remembered',
+      NOT_REMEMBERED: 'idioms_not_remembered'
+    };
+
+    let idiomsData = [];
+    let currentIndex = 0;
+
+    fetch('idioms_data.json')
+      .then(res => res.json())
+      .then(data => {
+        idiomsData = data;
+        renderIdiom();
+      });
+
+    function getStorageData(key) {
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : {};
+    }
+
+    function setStorageData(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function renderIdiom() {
+      if (!idiomsData.length) return;
+      const idiom = idiomsData[currentIndex];
+      document.getElementById('phrase').textContent = idiom.phrase;
+      document.getElementById('meaning').textContent = idiom.meaning;
+    }
+
+    function markRemembered() {
+      const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
+      remembered[currentIndex] = true;
+      setStorageData(STORAGE_KEYS.REMEMBERED, remembered);
+
+      const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
+      delete notRemembered[currentIndex];
+      setStorageData(STORAGE_KEYS.NOT_REMEMBERED, notRemembered);
+
+      nextIdiom();
+    }
+
+    function markNotRemembered() {
+      const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
+      notRemembered[currentIndex] = true;
+      setStorageData(STORAGE_KEYS.NOT_REMEMBERED, notRemembered);
+
+      const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
+      delete remembered[currentIndex];
+      setStorageData(STORAGE_KEYS.REMEMBERED, remembered);
+
+      nextIdiom();
+    }
+
+    function resetProgress() {
+      localStorage.removeItem(STORAGE_KEYS.REMEMBERED);
+      localStorage.removeItem(STORAGE_KEYS.NOT_REMEMBERED);
+      alert("進捗をリセットしました");
+    }
+
+    function nextIdiom() {
+      currentIndex = (currentIndex + 1) % idiomsData.length;
+      renderIdiom();
+    }
+
+    function saveToGoogleSheet(entries) {
+      fetch('https://script.google.com/macros/s/【あなたのGASデプロイURL】/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entries })
+      })
+      .then(res => res.text())
+      .then(msg => alert("Google Driveに保存しました: " + msg))
+      .catch(err => {
+        console.error(err);
+        alert("保存に失敗しました");
+      });
+    }
+
+    document.getElementById('export-stats').addEventListener('click', () => {
+      const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
+      const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
+
+      const entries = [];
+
+      for (const index in remembered) {
+        const idiom = idiomsData[index];
+        entries.push({
+          phrase: idiom.phrase,
+          meaning: idiom.meaning,
+          status: "覚えた"
         });
+      }
 
-        // Google Apps Script にPOST送信
-        function saveToGoogleSheet(entries) {
-          fetch('https://script.google.com/a/macros/soshigakuen.ed.jp/s/AKfycbyZi2h-Y4ZNlDxhN1LYe6zy8fVPWtJ6dxkJG3JgcfZrDs0tCyvWPodJySbreioyHgNXhw/exec', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ entries })
-          })
-          .then(res => res.text())
-          .then(msg => alert("Google Driveに保存しました: " + msg))
-          .catch(err => {
-            console.error(err);
-            alert("保存に失敗しました");
-          });
-        }
-
-        // 「統計をエクスポート」ボタンが押されたとき
-        document.getElementById('export-stats').addEventListener('click', () => {
-          const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
-          const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
-
-          const entries = [];
-
-          for (const index in remembered) {
-            const idiom = idiomsData[index];
-            entries.push({
-              phrase: idiom.phrase,
-              meaning: idiom.meaning,
-              status: "覚えた"
-            });
-          }
-
-          for (const index in notRemembered) {
-            const idiom = idiomsData[index];
-            entries.push({
-              phrase: idiom.phrase,
-              meaning: idiom.meaning,
-              status: "覚えてない"
-            });
-          }
-
-          saveToGoogleSheet(entries);
+      for (const index in notRemembered) {
+        const idiom = idiomsData[index];
+        entries.push({
+          phrase: idiom.phrase,
+          meaning: idiom.meaning,
+          status: "覚えてない"
         });
+      }
 
-    </script>
+      saveToGoogleSheet(entries);
+    });
+  </script>
 </body>
 </html>
