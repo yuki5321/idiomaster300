@@ -1006,6 +1006,7 @@
             updateStatistics();
         });
 
+        // Google Apps Script にPOST送信
         function saveToGoogleSheet(entries) {
           fetch('https://script.google.com/a/macros/soshigakuen.ed.jp/s/AKfycbyZi2h-Y4ZNlDxhN1LYe6zy8fVPWtJ6dxkJG3JgcfZrDs0tCyvWPodJySbreioyHgNXhw/exec', {
             method: 'POST',
@@ -1013,14 +1014,14 @@
             body: JSON.stringify({ entries })
           })
           .then(res => res.text())
-          .then(msg => alert("保存完了: " + msg))
+          .then(msg => alert("Google Driveに保存しました: " + msg))
           .catch(err => {
             console.error(err);
             alert("保存に失敗しました");
           });
         }
 
-        // exportStatistics の代わりにこのイベント追加
+        // 「統計をエクスポート」ボタンが押されたとき
         document.getElementById('export-stats').addEventListener('click', () => {
           const remembered = getStorageData(STORAGE_KEYS.REMEMBERED);
           const notRemembered = getStorageData(STORAGE_KEYS.NOT_REMEMBERED);
